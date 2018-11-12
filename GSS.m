@@ -21,7 +21,6 @@ for octave=1:noctaves
         h = exp(-x.^2/(2*sigma^2));
         h = h/sum(h(:)); % Normalize to unit volume
         blurredImage = conv2(h,h,baseIm,'valid');
-        [r,c] = size(blurredImage);
         
         scaleSource = nan(imRow,imCol);
         scaleSource(max+1:imRow-max, max+1:imCol-max) = blurredImage;
@@ -33,4 +32,5 @@ for octave=1:noctaves
            im = imresize(scaleSource, 0.5);
         end
     end
+    scale = [];
 end
