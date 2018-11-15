@@ -39,13 +39,13 @@ for octaveIdx=1:noctaves
                 entry = [colIdx rowIdx pixel];
                 
                 % Save entry to the min field
-                if(pixel == minNeighbour)
+                if(pixel == minNeighbour && ~sum(isnan(kernel(:))))
                     kpMin = kp{octaveIdx}{dogIdx-1}.min;
                     kp{octaveIdx}{dogIdx-1}.min = [kpMin; entry];
                 end
                 
                 % Save entry to the max field
-                if(pixel == maxNeighbour)
+                if(pixel == maxNeighbour && ~sum(isnan(kernel(:))))
                     kpMax = kp{octaveIdx}{dogIdx-1}.max;
                     kp{octaveIdx}{dogIdx-1}.max = [kpMax; entry];
                 end
