@@ -23,8 +23,8 @@ for octaveIdx=1:noctaves
                 kernel(1:3,1:3,3) = bottomDog(rowIdx-1:rowIdx+1, colIdx-1:colIdx+1);
                 
                 % Find the min and max pixels from the kernel
-                minNeighbour = min(min(kernel));
-                maxNeighbour = max(max(kernel));
+                minNeighbour = min(kernel,[],'all');
+                maxNeighbour = max(kernel,[],'all');
                 
                 if(pixel == minNeighbour)
                     % TODO: Save
