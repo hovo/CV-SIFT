@@ -7,8 +7,15 @@ for octaveIdx=1:noctaves
     % Get current octave
     octave = DoGPyr{octaveIdx};
     % Find size of the octave
-    [row,col,ns] = size(octave); 
+    [row,col,ns] = size(octave);
+    
+    % Init empty cells
+    kp{octaveIdx} = cell(1,ns-2);
+        
     for dogIdx = 2:(ns-1)
+        % Initialize max/min fields
+        kp{octaveIdx}{dogIdx-1} = struct('max',[],'min',[]);
+        
         % Get the 3 DoGs
         currentDog = octave(:,:,dogIdx);
         topDog = octave(:,:,dogIdx+1);
@@ -26,13 +33,21 @@ for octaveIdx=1:noctaves
                 minNeighbour = min(kernel,[],'all');
                 maxNeighbour = max(kernel,[],'all');
                 
+                % Create min/max entry
+                entry = [rowIdx colIdx pixel];
+                
+                % Save entry to the min field
                 if(pixel == minNeighbour)
-                    % TODO: Save
+                    kpMin = kp{octaveIdx}{dogIdx-1}.min;
+                    kp{octaveIdx}{dogIdx-1}.min = [kpMin; entry];
                 end
                 
+                % Save entry to the max field
                 if(pixel == maxNeighbour)
-                    % TODO: Save
+                    kpMax = kp{octaveIdx}{dogIdx-1}.max;
+                    kp{octaveIdx}{dogIdx-1}.max = [kpMax; entry];
                 end
+                
             end
         end
     end
