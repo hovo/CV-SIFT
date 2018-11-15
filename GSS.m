@@ -15,21 +15,28 @@ for octave=1:noctaves
     [imRow, imCol] = size(baseIm);
     % Iterate over each suboctave
     for suboctave=0:(p-1)
-        sigma = s1*k^suboctave;
+        if(suboctave > 0)
+            sigma = sqrt((k^2 - 1)*k^(2*(suboctave+1-2))*s1^2);
+        else
+            sigma = s1;
+        end
+        
         max = ceil(sqrt(2*sigma^2*log(100)));
         x = -max:max;
         h = exp(-x.^2/(2*sigma^2));
-        h = h/sum(h(:)); % Normalize to unit volume
+        h = h/sum(h(:));
         blurredImage = conv2(h,h,baseIm,'valid');
         
         scaleSource = nan(imRow,imCol);
         scaleSource(max+1:imRow-max, max+1:imCol-max) = blurredImage;
         scale(:,:,suboctave+1) = scaleSource;
+        baseIm = scaleSource;
+        
         % Save scale to GPyr
         GPyr{octave} = scale;
         % Update the base image for the next scale
         if(suboctave == ns)
-           im = imresize(scaleSource, 0.5);
+            im = imresize(scaleSource, 0.5);
         end
     end
     scale = [];
